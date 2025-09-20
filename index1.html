@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài Thi Trắc Nghiệm: Ôn tập các số đến 1 000</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .quiz-container {
+            max-width: 800px;
+            margin: auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1, h2 {
+            text-align: center;
+            color: #0056b3;
+        }
+        .question-block {
+            margin-bottom: 25px;
+            border: 2px solid transparent;
+            border-radius: 8px;
+            padding: 15px;
+            transition: all 0.3s ease;
+        }
+        .question {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .options div {
+            margin-bottom: 8px;
+            padding: 5px;
+        }
+        .options label {
+            margin-left: 10px;
+            cursor: pointer;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            font-size: 16px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            outline: none;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        #results-container {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 5px;
+            background-color: #e9ecef;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        
+        /* Kiểu cho câu trả lời đúng và sai */
+        .correct {
+            background-color: #d4edda;
+            border-left: 5px solid #28a745;
+        }
+        .incorrect {
+            background-color: #f8d7da;
+            border-left: 5px solid #dc3545;
+        }
+        .correct-answer-text {
+            font-weight: bold;
+            color: #155724;
+            margin-top: 10px;
+        }
+
+        .hidden {
+            display: none;
+        }
+        .button-container {
+            text-align: center;
+            margin-top: 30px;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="quiz-container">
+        <h1>Bài 1: Ôn Tập Các Số Đến 1 000</h1>
+        <div id="results-container" class="hidden"></div>
+        <form id="quizForm">
+            </form>
+
+        <div class="button-container">
+            <button class="btn" id="submitBtn">Nộp bài</button>
+            <button class="btn hidden" id="retryBtn">Làm lại bài</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const quizData = [
+                // NHẬN BIẾT
+                { question: "Câu 1: Số liền trước của số 370 là", options: ["372", "371", "368", "369"], answer: "369" },
+                { question: "Câu 2: Số liền sau của số 589 là", options: ["588", "591", "590", "587"], answer: "590" },
+                { question: "Câu 3: Số 961 gồm bao nhiêu trăm, chục, đơn vị?", options: ["1 trăm, 6 chục, 9 đơn vị", "9 trăm, 6 chục, 1 đơn vị", "6 trăm, 9 chục, 1 đơn vị", "9 trăm, 1 chục, 6 đơn vị"], answer: "9 trăm, 6 chục, 1 đơn vị" },
+                { question: "Câu 4: Số 305 đọc là?", options: ["Ba trăm linh lăm", "Ba lẻ năm.", "Ba trăm lẻ năm.", "Ba trăm linh năm"], answer: "Ba trăm linh năm" },
+                { question: "Câu 5: Số thích hợp điền vào dấu ? là<br><img src='https://i.imgur.com/rL4M44n.png' alt='Number line'>", options: ["340", "335", "345", "355"], answer: "340" },
+                { question: "Câu 6: Số gồm 6 trăm, 5 chục và 2 đơn vị là", options: ["625", "652", "256", "562"], answer: "652" },
+                { question: "Câu 7: Số gồm 7 trăm, 0 chục và 6 đơn vị là", options: ["706", "607", "760", "670"], answer: "706" },
+                { question: "Câu 8: Số gồm 8 trăm, 8 chục và 0 đơn vị là", options: ["88", "808", "880", "Không có số nào đúng."], answer: "880" },
+                { question: "Câu 9: Số 384 được viết thành", options: ["384 = 300 + 80 + 4", "384 = 300 + 40 + 8", "384 = 800 + 30 + 4", "384 = 400 + 80 + 3"], answer: "384 = 300 + 80 + 4" },
+                { question: "Câu 10: Cho dãy số 615; 616; ?; 618; 619. Số ở vị trí dấu ? là", options: ["614", "620", "616", "617"], answer: "617" },
+                { question: "Câu 11: Cho 505 ? 550. Dấu thích hợp điền vào dấu ? là", options: [">", "<", "=", "Không so sánh được."], answer: "<" },
+                { question: "Câu 12: Số còn thiếu trong dãy số là? 535; …; 545; 550; …; 560; 565; 570.", options: ["540; 555", "555; 540", "536; 551", "540; 559"], answer: "540; 555" },
+                { question: "Câu 13: Số có cách đọc năm trăm linh năm được viết như nào?", options: ["500", "501", "505", "515"], answer: "505" },
+                { question: "Câu 14: Cho dãy số 245; 247; …; 251; 253. Số thích hợp điền vào chỗ chấm là", options: ["248", "249", "250", "254"], answer: "249" },
+                { question: "Câu 15: Ba số nào sau đây là ba số liên tiếp", options: ["989; 990; 991", "998; 997; 999", "909; 901; 911", "976; 978; 979"], answer: "989; 990; 991" },
+                { question: "Câu 16: Số liền trước của số lớn nhất có ba chữ số là?", options: ["999", "998", "900", "990"], answer: "998" },
+                { question: "Câu 17: Cho 90, …, … Chọn số thích hợp vào chỗ chấm để được ba số liên tiếp.", options: ["91, 92", "93, 94", "88, 89", "92, 94"], answer: "91, 92" },
+                { question: "Câu 18: Con trâu cân nặng 152 kg, con bò cân nặng 148 kg, con lợn nặng 108 kg, con hà mã cân nặng 122 kg. Hỏi con nào nặng nhất?", options: ["Con bò", "Con trâu", "Con lợn", "Con hà mã"], answer: "Con trâu" },
+                { question: "Câu 19: Sắp xếp các số 789; 799; 898; 989 theo thứ tự từ bé đến lớn là", options: ["789; 989; 799; 898", "898; 989; 799; 789", "989; 789; 799; 898", "789; 799; 898; 989"], answer: "789; 799; 898; 989" },
+                { question: "Câu 20: Điền dấu: >, <, = ? 500 + 90 + 8 ? 598", options: ["Không có dấu nào", ">", "<", "="], answer: "=" },
+                { question: "Câu 21: Sắp xếp các số 269; 273; 99; 277 theo thứ tự từ lớn đến bé là", options: ["99; 269; 273; 277", "99; 269; 277; 273", "277; 273; 269; 99", "269; 99; 273; 277"], answer: "277; 273; 269; 99" },
+                { question: "Câu 22: Điền dấu: >, <, = ? 900 + 70 + 9 ? 900 + 90 + 8", options: ["Không có dấu nào", ">", "<", "="], answer: "<" },
+                { question: "Câu 23: Các số có ba chữ số khác nhau được lập từ 5, 6, 7 là?", options: ["567, 576; 675; 765", "756; 657; 517; 576", "567; 765; 657; 751", "756; 753; 657; 576"], answer: "567, 576; 675; 765" },
+                { question: "Câu 24: Số bé nhất trong các số 586; 624; 426; 568 là", options: ["824", "586", "426", "568"], answer: "426" },
+                { question: "Câu 25: Trong các số dưới đây, có bao nhiêu số lớn hơn 800?<br><img src='https://i.imgur.com/kPj2f5Q.png' alt='Numbers in bubbles'>", options: ["1", "2", "3", "4"], answer: "3" },
+                { question: "Câu 26: Ba con lợn có cân nặng lần lượt là 99 kg, 109 kg và 119 kg. Biết lợn đen nặng nhất và lợn khoang nhẹ hơn lợn trắng. Cân nặng của lợn đen, lợn trắng và lợn khoang theo thứ tự là<br><img src='https://i.imgur.com/97yN7oY.png' alt='Three pigs'>", options: ["119 kg, 109 kg, 99 kg", "119 kg, 99 kg, 109 kg", "99 kg, 109 kg, 119 kg", "109 kg, 99 kg, 119 kg"], answer: "119 kg, 109 kg, 99 kg" },
+                { question: "Câu 27: Hãy điền số tròn trăm thích hợp vào chỗ trống để được phép so sánh đúng .?. + 80 < 250", options: ["200", "50", "150", "100"], answer: "100" },
+                { question: "Câu 28: Có bao nhiêu chữ số a sao cho a94 > 485 và a < 8?", options: ["2", "3", "4", "5"], answer: "3" },
+                { question: "Câu 29: Có bao nhiêu số tròn chục có ba chữ số mà tổng các chữ số của số đó bằng 9.", options: ["6 số", "7 số", "8 số", "9 số"], answer: "9 số" },
+                { question: "Câu 30: Có 9 chữ số viết liền nhau 120 317 495. Giữ nguyên thứ tự các chữ số, em hãy xoá đi 6 chữ số để được số còn lại để được số có ba chữ số lớn nhất?", options: ["749", "795", "975", "174"], answer: "795" }
+            ];
+
+            const quizForm = document.getElementById('quizForm');
+            const submitBtn = document.getElementById('submitBtn');
+            const retryBtn = document.getElementById('retryBtn');
+            const resultsContainer = document.getElementById('results-container');
+
+            function loadQuiz() {
+                let quizHTML = '';
+                quizData.forEach((item, index) => {
+                    quizHTML += `<div class="question-block" id="q${index}">`;
+                    quizHTML += `<p class="question">${item.question}</p>`;
+                    quizHTML += `<div class="options">`;
+                    item.options.forEach(option => {
+                        const optionId = `q${index}_${option.replace(/\s|[^a-zA-Z0-9]/g, '')}`;
+                        quizHTML += `<div><input type="radio" name="question${index}" id="${optionId}" value="${option}"><label for="${optionId}">${option}</label></div>`;
+                    });
+                    quizHTML += `</div><div id="correct-answer-${index}" class="correct-answer-text"></div></div>`;
+                });
+                quizForm.innerHTML = quizHTML;
+            }
+
+            function submitQuiz() {
+                let score = 0;
+
+                quizData.forEach((item, index) => {
+                    const questionBlock = document.getElementById(`q${index}`);
+                    const correctAnswerEl = document.getElementById(`correct-answer-${index}`);
+                    correctAnswerEl.innerHTML = ''; // Xóa đáp án cũ
+                    questionBlock.classList.remove('correct', 'incorrect');
+
+                    const selectedOption = document.querySelector(`input[name="question${index}"]:checked`);
+                    
+                    if (selectedOption) {
+                        if (selectedOption.value === item.answer) {
+                            score++;
+                            questionBlock.classList.add('correct');
+                        } else {
+                            questionBlock.classList.add('incorrect');
+                            correctAnswerEl.innerHTML = `Đáp án đúng là: ${item.answer}`;
+                        }
+                    } else {
+                        questionBlock.classList.add('incorrect');
+                        correctAnswerEl.innerHTML = `Đáp án đúng là: ${item.answer}`;
+                    }
+
+                    // Vô hiệu hóa tất cả các lựa chọn
+                    const radios = document.querySelectorAll(`input[name="question${index}"]`);
+                    radios.forEach(radio => radio.disabled = true);
+                });
+
+                resultsContainer.innerHTML = `Bạn đã trả lời đúng ${score} trên tổng số ${quizData.length} câu hỏi.`;
+                resultsContainer.classList.remove('hidden');
+                submitBtn.classList.add('hidden');
+                retryBtn.classList.remove('hidden');
+                
+                window.scrollTo({ top: 0, behavior: 'smooth' }); // Cuộn lên đầu trang
+            }
+
+            loadQuiz();
+            submitBtn.addEventListener('click', submitQuiz);
+            retryBtn.addEventListener('click', () => {
+                location.reload(); // Tải lại trang để làm lại
+            });
+        });
+    </script>
+
+</body>
+</html>
